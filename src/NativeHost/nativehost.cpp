@@ -9,9 +9,9 @@
 #include <string.h>
 #include <assert.h>
 #include <iostream>
-#include "./inc/nethost.h"
-#include "./inc/coreclr_delegates.h"
-#include "./inc/hostfxr.h"
+#include "./inc/nethost.hpp"
+#include "./inc/delegates.hpp"
+#include "./inc/hostfxr.hpp"
 
 #ifdef WINDOWS
 #include <Windows.h>
@@ -42,7 +42,7 @@ namespace
 
     // Forward declarations
     bool load_hostfxr();
-    load_assembly_and_get_function_pointer_fn get_dotnet_load_assembly(const char_t *assembly);
+    MCSR::load_assembly_and_get_function_pointer_fn get_dotnet_load_assembly(const char_t *assembly);
 }
 
 #if defined(WINDOWS)
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
     // STEP 2: Initialize and start the .NET Core runtime
     //
     const string_t config_path = root_path + STR("DotNetLib.runtimeconfig.json");
-    load_assembly_and_get_function_pointer_fn load_assembly_and_get_function_pointer = nullptr;
+    MCSR::load_assembly_and_get_function_pointer_fn load_assembly_and_get_function_pointer = nullptr;
     load_assembly_and_get_function_pointer = get_dotnet_load_assembly(config_path.c_str());
     assert(load_assembly_and_get_function_pointer != nullptr && "Failure: get_dotnet_load_assembly()");
 
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     const char_t *dotnet_type_method = STR("Hello");
     // <SnippetLoadAndGet>
     // Function pointer to managed delegate
-    component_entry_point_fn hello = nullptr;
+    MCSR::component_entry_point_fn hello = nullptr;
     int rc = load_assembly_and_get_function_pointer(
         dotnetlib_path.c_str(),
         dotnet_type,
@@ -124,21 +124,9 @@ int main(int argc, char *argv[])
         // </SnippetCallManaged>
     }
 
-#ifdef NET5_0
+
     // Function pointer to managed delegate with non-default signature
-    typedef void (CORECLR_DELEGATE_CALLTYPE *custom_entry_point_fn)(lib_args args);
-    custom_entry_point_fn custom = nullptr;
-    rc = load_assembly_and_get_function_pointer(
-        dotnetlib_path.c_str(),
-        dotnet_type,
-        STR("CustomEntryPointUnmanaged") /*method_name*/,
-        UNMANAGEDCALLERSONLY_METHOD,
-        nullptr,
-        (void**)&custom);
-    assert(rc == 0 && custom != nullptr && "Failure: load_assembly_and_get_function_pointer()");
-#else
-    // Function pointer to managed delegate with non-default signature
-    typedef void (CORECLR_DELEGATE_CALLTYPE *custom_entry_point_fn)(lib_args args);
+    typedef void (DELEGATE_CALLTYPE *custom_entry_point_fn)(lib_args args);
     custom_entry_point_fn custom = nullptr;
     rc = load_assembly_and_get_function_pointer(
         dotnetlib_path.c_str(),
@@ -148,7 +136,6 @@ int main(int argc, char *argv[])
         nullptr,
         (void**)&custom);
     assert(rc == 0 && custom != nullptr && "Failure: load_assembly_and_get_function_pointer()");
-#endif
 
     lib_args args
     {
@@ -221,7 +208,7 @@ namespace
 
     // <SnippetInitialize>
     // Load and initialize .NET Core and get desired function pointer for scenario
-    load_assembly_and_get_function_pointer_fn get_dotnet_load_assembly(const char_t *config_path)
+    MCSR::load_assembly_and_get_function_pointer_fn get_dotnet_load_assembly(const char_t *config_path)
     {
         // Load .NET Core
         void *load_assembly_and_get_function_pointer = nullptr;
@@ -243,7 +230,7 @@ namespace
             std::cerr << "Get delegate failed: " << std::hex << std::showbase << rc << std::endl;
 
         close_fptr(cxt);
-        return (load_assembly_and_get_function_pointer_fn)load_assembly_and_get_function_pointer;
+        return (MCSR::load_assembly_and_get_function_pointer_fn)load_assembly_and_get_function_pointer;
     }
     // </SnippetInitialize>
 }

@@ -36,9 +36,9 @@ using string_t = std::basic_string<char_t>;
 namespace
 {
 	// Globals to hold hostfxr exports
-	initRuntimeConfig init_fptr;
-	getDelegate get_delegate_fptr;
-	close close_fptr;
+	HostFXR::initRuntimeConfig init_fptr;
+	HostFXR::getDelegate get_delegate_fptr;
+	HostFXR::close close_fptr;
 
 	// Forward declarations
 	bool load_hostfxr();
@@ -189,9 +189,9 @@ namespace
 
 		// Load hostfxr and get desired exports
 		void *lib = load_library(buffer);
-		init_fptr = (initRuntimeConfig)get_export(lib, "hostfxr_initialize_for_runtime_config");
-		get_delegate_fptr = (getDelegate)get_export(lib, "hostfxr_get_runtime_delegate");
-		close_fptr = (close)get_export(lib, "hostfxr_close");
+		init_fptr = (HostFXR::initRuntimeConfig)get_export(lib, "hostfxr_initialize_for_runtime_config");
+		get_delegate_fptr = (HostFXR::getDelegate)get_export(lib, "hostfxr_get_runtime_delegate");
+		close_fptr = (HostFXR::close)get_export(lib, "hostfxr_close");
 
 		return (init_fptr && get_delegate_fptr && close_fptr);
 	}
@@ -201,7 +201,7 @@ namespace
 	{
 		// Load .NET Core
 		void *load_assembly_and_get_function_pointer = nullptr;
-		hostfxr_handle cxt = nullptr;
+		HostFXR::Handle cxt = nullptr;
 		int rc = init_fptr(config_path, nullptr, &cxt);
 		if (rc != 0 || cxt == nullptr)
 		{
@@ -213,7 +213,7 @@ namespace
 		// Get the load assembly function pointer
 		rc = get_delegate_fptr(
 				cxt,
-				HostFXRDelegateType::LoadAssmAndGetFnPtr,
+				HostFXR::DelegateType::LoadAssmAndGetFnPtr,
 				&load_assembly_and_get_function_pointer);
 		if (rc != 0 || load_assembly_and_get_function_pointer == nullptr)
 			std::cerr << "Get delegate failed: " << std::hex << std::showbase << rc << std::endl;

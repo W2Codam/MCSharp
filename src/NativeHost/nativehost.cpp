@@ -42,7 +42,7 @@ namespace
 
     // Forward declarations
     bool load_hostfxr();
-    MCSR::load_assembly_and_get_function_pointer_fn get_dotnet_load_assembly(const char_t *assembly);
+    MCSR::Delegates::load get_dotnet_load_assembly(const char_t *assembly);
 }
 
 #if defined(WINDOWS)
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
     // STEP 2: Initialize and start the .NET Core runtime
     //
     const string_t config_path = root_path + STR("DotNetLib.runtimeconfig.json");
-    MCSR::load_assembly_and_get_function_pointer_fn load_assembly_and_get_function_pointer = nullptr;
+    MCSR::Delegates::load load_assembly_and_get_function_pointer = nullptr;
     load_assembly_and_get_function_pointer = get_dotnet_load_assembly(config_path.c_str());
     assert(load_assembly_and_get_function_pointer != nullptr && "Failure: get_dotnet_load_assembly()");
 
@@ -90,9 +90,8 @@ int main(int argc, char *argv[])
     const string_t dotnetlib_path = root_path + STR("DotNetLib.dll");
     const char_t *dotnet_type = STR("DotNetLib.Lib, DotNetLib");
     const char_t *dotnet_type_method = STR("Hello");
-    // <SnippetLoadAndGet>
     // Function pointer to managed delegate
-    MCSR::component_entry_point_fn hello = nullptr;
+    MCSR::Delegates::component_entry_point_fn hello = nullptr;
     int rc = load_assembly_and_get_function_pointer(
         dotnetlib_path.c_str(),
         dotnet_type,
@@ -100,7 +99,6 @@ int main(int argc, char *argv[])
         nullptr /*delegate_type_name*/,
         nullptr,
         (void**)&hello);
-    // </SnippetLoadAndGet>
     assert(rc == 0 && hello != nullptr && "Failure: load_assembly_and_get_function_pointer()");
 
     //
@@ -121,7 +119,6 @@ int main(int argc, char *argv[])
         };
 
         hello(&args, sizeof(args));
-        // </SnippetCallManaged>
     }
 
 
@@ -185,7 +182,6 @@ namespace
     }
 #endif
 
-    // <SnippetLoadHostFxr>
     // Using the nethost library, discover the location of hostfxr and get exports
     bool load_hostfxr()
     {
@@ -204,11 +200,9 @@ namespace
 
         return (init_fptr && get_delegate_fptr && close_fptr);
     }
-    // </SnippetLoadHostFxr>
 
-    // <SnippetInitialize>
     // Load and initialize .NET Core and get desired function pointer for scenario
-    MCSR::load_assembly_and_get_function_pointer_fn get_dotnet_load_assembly(const char_t *config_path)
+    MCSR::Delegates::load get_dotnet_load_assembly(const char_t *config_path)
     {
         // Load .NET Core
         void *load_assembly_and_get_function_pointer = nullptr;
@@ -224,13 +218,12 @@ namespace
         // Get the load assembly function pointer
         rc = get_delegate_fptr(
             cxt,
-            hdt_load_assembly_and_get_function_pointer,
+            HostFXRDelegateType::LoadAssmAndGetFnPtr,
             &load_assembly_and_get_function_pointer);
         if (rc != 0 || load_assembly_and_get_function_pointer == nullptr)
             std::cerr << "Get delegate failed: " << std::hex << std::showbase << rc << std::endl;
 
         close_fptr(cxt);
-        return (MCSR::load_assembly_and_get_function_pointer_fn)load_assembly_and_get_function_pointer;
+        return (MCSR::Delegates::load)load_assembly_and_get_function_pointer;
     }
-    // </SnippetInitialize>
 }

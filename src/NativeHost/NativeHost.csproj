@@ -88,7 +88,7 @@
       <LinkArgs>-ldl -lnethost -lpthread -L&quot;$(NetHostDir)&quot; -Wl,-rpath,'@loader_path'</LinkArgs>
     </PropertyGroup>
 
-    <Exec Command="g++ $(SourceFiles) $(IncPaths) $(PreprocessorDefines) -std=c++11 -o &quot;$(NativeOutputFilePath)&quot; $(CompilerArgs) $(LinkArgs)"
+    <Exec Command="g++ $(SourceFiles) $(IncPaths) $(PreprocessorDefines) -std=c++17 -o &quot;$(NativeOutputFilePath)&quot; $(CompilerArgs) $(LinkArgs)"
           WorkingDirectory="$(NativeObjDir)"
           ConsoleToMsBuild="true" />
 

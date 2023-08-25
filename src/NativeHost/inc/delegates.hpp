@@ -9,11 +9,11 @@
 
 #pragma once
 
-// Includes & Definitions
+#include <stdint.h>
+
+// Types, Defines, ...
 // ============================================================================
 
-// TODO: Move all the windows specific stuff to a seperate shared header
-#include <stdint.h>
 #if defined(_WIN32)
 	#define DELEGATE_CALLTYPE __stdcall
 	#ifdef _WCHAR_T_DEFINED
@@ -31,7 +31,7 @@
 // Functions
 // ============================================================================
 
-namespace MCSR
+namespace MCSR::Delegates
 {
 	
 /**
@@ -48,7 +48,7 @@ namespace MCSR
  * @param[out] delegate Pointer where to store the function pointer result
  * @return 0 on success, otherwise failure
  */
-typedef int (DELEGATE_CALLTYPE *load_assembly_and_get_function_pointer_fn)(
+typedef int (DELEGATE_CALLTYPE *load)(
 	const char_t*	assemblyPath,
 	const char_t*	typeName,
 	const char_t*	methodName,

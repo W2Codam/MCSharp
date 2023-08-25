@@ -1,10 +1,18 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// ============================================================================
+// Copyright (C) 2023 - W2Wizard & TechDaan
+// See the LICENSE file in the project root for more information.
+// ============================================================================
+// This file is a modified version of the original file from the .NET Core
+// Runtime repository. The original file is licensed under the MIT license.
+// See: https://github.com/dotnet/runtime/blob/main/src/native/corehost
+// ============================================================================
 
-#ifndef __NETHOST_H__
-#define __NETHOST_H__
+#pragma once
 
 #include <stddef.h>
+
+// Types, Defines, ...
+// ============================================================================
 
 #ifdef _WIN32
     #ifdef NETHOST_EXPORT
@@ -40,6 +48,8 @@
 extern "C" {
 #endif
 
+// ============================================================================
+
 // Parameters for get_hostfxr_path
 //
 // Fields:
@@ -57,9 +67,12 @@ extern "C" {
 //     path and the assembly_path is ignored.
 //
 struct get_hostfxr_parameters {
-    size_t size;
-    const char_t *assembly_path;
-    const char_t *dotnet_root;
+  // Size of the struct as passed to the API
+  size_t size;
+  // Path to the component's assembly
+  const char_t* assembly_path;
+  // Path to directory containing the dotnet executable
+  const char_t* dotnet_root;
 };
 
 //
@@ -88,12 +101,11 @@ struct get_hostfxr_parameters {
 //   to call this function multiple times, pass a large buffer (e.g. PATH_MAX).
 //
 NETHOST_API int NETHOST_CALLTYPE get_hostfxr_path(
-    char_t * buffer,
-    size_t * buffer_size,
-    const struct get_hostfxr_parameters *parameters);
+  char_t* buffer,
+  size_t* buffer_size,
+  const get_hostfxr_parameters* parameters
+);
 
 #ifdef __cplusplus
 } // extern "C"
 #endif
-
-#endif // __NETHOST_H__

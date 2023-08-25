@@ -9,13 +9,9 @@
 #include <string.h>
 #include <assert.h>
 #include <iostream>
-
-// Provided by the AppHost NuGet package and installed as an SDK pack
-#include <nethost.h>
-
-// Header files copied from https://github.com/dotnet/core-setup
-#include <coreclr_delegates.h>
-#include <hostfxr.h>
+#include "./inc/nethost.h"
+#include "./inc/coreclr_delegates.h"
+#include "./inc/hostfxr.h"
 
 #ifdef WINDOWS
 #include <Windows.h>

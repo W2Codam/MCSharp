@@ -1,5 +1,6 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+// Copied from: https://github.com/dotnet/runtime/blob/main/src/native/corehost/coreclr_delegates.h
 
 #ifndef __CORECLR_DELEGATES_H__
 #define __CORECLR_DELEGATES_H__

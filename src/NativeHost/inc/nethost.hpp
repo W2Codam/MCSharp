@@ -66,7 +66,7 @@ extern "C" {
 //     'dotnet app.dll', which means it will be searched for under the dotnet_root
 //     path and the assembly_path is ignored.
 //
-struct get_hostfxr_parameters {
+struct getHostFXRParams {
   // Size of the struct as passed to the API
   size_t size;
   // Path to the component's assembly
@@ -88,7 +88,7 @@ struct get_hostfxr_parameters {
 //           or buffer is nullptr, this is populated with the minimum required size
 //           in char_t units for a buffer to hold the hostfxr path
 //
-//   get_hostfxr_parameters
+//   getHostFXRParams
 //     Optional. Parameters that modify the behaviour for locating the hostfxr library.
 //     If nullptr, hostfxr is located using the enviroment variable or global registration
 //
@@ -103,7 +103,7 @@ struct get_hostfxr_parameters {
 NETHOST_API int NETHOST_CALLTYPE get_hostfxr_path(
   char_t* buffer,
   size_t* buffer_size,
-  const get_hostfxr_parameters* parameters
+  const getHostFXRParams* parameters
 );
 
 #ifdef __cplusplus

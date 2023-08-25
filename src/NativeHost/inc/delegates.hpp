@@ -65,7 +65,7 @@ typedef int (DELEGATE_CALLTYPE *load)(
  * @param[in] arg_size_in_bytes Size of the argument in bytes
  * @return 0 on success, otherwise failure
  */
-typedef int (DELEGATE_CALLTYPE *component_entry_point_fn)(
+typedef int (DELEGATE_CALLTYPE *componentEntryPoint)(
 	void*		arg,
 	int32_t     arg_size_in_bytes
 );
@@ -84,7 +84,7 @@ typedef int (DELEGATE_CALLTYPE *component_entry_point_fn)(
  * @param[out] delegate Pointer where to store the function pointer result
  * @return 0 on success, otherwise failure
  */
-typedef int (DELEGATE_CALLTYPE *get_function_pointer_fn)(
+typedef int (DELEGATE_CALLTYPE *getFunctionPointer)(
 	const char_t*	typeName,
 	const char_t*	methodName,
 	const char_t*	delegateTypeName,

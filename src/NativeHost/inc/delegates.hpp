@@ -31,7 +31,7 @@
 // Functions
 // ============================================================================
 
-namespace MCSR::Delegates
+namespace MCS::Delegates
 {
 	
 /**
@@ -53,8 +53,8 @@ typedef int (DELEGATE_CALLTYPE *load)(
 	const char_t*	typeName,
 	const char_t*	methodName,
 	const char_t*	delegateTypeName,
-	void*					reserved,
-	void**				delegate
+	void*			reserved,
+	void**		    delegate
 );
 
 /**
@@ -67,7 +67,7 @@ typedef int (DELEGATE_CALLTYPE *load)(
  */
 typedef int (DELEGATE_CALLTYPE *component_entry_point_fn)(
 	void*		arg,
-	int32_t arg_size_in_bytes
+	int32_t     arg_size_in_bytes
 );
 
 /**
@@ -88,9 +88,9 @@ typedef int (DELEGATE_CALLTYPE *get_function_pointer_fn)(
 	const char_t*	typeName,
 	const char_t*	methodName,
 	const char_t*	delegateTypeName,
-	void*					loadContext,
-	void*					reserved,
-	void**				delegate
+	void*			loadContext,
+	void*			reserved,
+	void**		    delegate
 );
 
-} // namespace MCSR
+} // namespace MCS

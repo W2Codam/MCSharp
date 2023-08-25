@@ -42,7 +42,7 @@ namespace
 
     // Forward declarations
     bool load_hostfxr();
-    MCSR::Delegates::load get_dotnet_load_assembly(const char_t *assembly);
+    MCS::Delegates::load get_dotnet_load_assembly(const char_t *assembly);
 }
 
 #if defined(WINDOWS)
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
     // STEP 2: Initialize and start the .NET Core runtime
     //
     const string_t config_path = root_path + STR("DotNetLib.runtimeconfig.json");
-    MCSR::Delegates::load load_assembly_and_get_function_pointer = nullptr;
+    MCS::Delegates::load load_assembly_and_get_function_pointer = nullptr;
     load_assembly_and_get_function_pointer = get_dotnet_load_assembly(config_path.c_str());
     assert(load_assembly_and_get_function_pointer != nullptr && "Failure: get_dotnet_load_assembly()");
 
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     const char_t *dotnet_type = STR("DotNetLib.Lib, DotNetLib");
     const char_t *dotnet_type_method = STR("Hello");
     // Function pointer to managed delegate
-    MCSR::Delegates::component_entry_point_fn hello = nullptr;
+    MCS::Delegates::component_entry_point_fn hello = nullptr;
     int rc = load_assembly_and_get_function_pointer(
         dotnetlib_path.c_str(),
         dotnet_type,
@@ -202,7 +202,7 @@ namespace
     }
 
     // Load and initialize .NET Core and get desired function pointer for scenario
-    MCSR::Delegates::load get_dotnet_load_assembly(const char_t *config_path)
+    MCS::Delegates::load get_dotnet_load_assembly(const char_t *config_path)
     {
         // Load .NET Core
         void *load_assembly_and_get_function_pointer = nullptr;
@@ -224,6 +224,6 @@ namespace
             std::cerr << "Get delegate failed: " << std::hex << std::showbase << rc << std::endl;
 
         close_fptr(cxt);
-        return (MCSR::Delegates::load)load_assembly_and_get_function_pointer;
+        return (MCS::Delegates::load)load_assembly_and_get_function_pointer;
     }
 }
